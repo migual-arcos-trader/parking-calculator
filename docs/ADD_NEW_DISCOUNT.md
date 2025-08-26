@@ -42,7 +42,7 @@ public enum DiscountType {
 
 ### 2. Create Discount Strategy Implementation
 
-From [🎯 DiscountStrategy.java](../src/main/java/com/paymeter/parking_calculator/domain/service/discount/DiscountStrategy.java)
+From [🎪 DiscountStrategy.java](../src/main/java/com/paymeter/parking_calculator/domain/service/discount/DiscountStrategy.java)
 
 Create the new implementation
 
