@@ -56,7 +56,7 @@ public class NewDiscountTypeStrategy implements DiscountStrategy {
         double totalHours = Math.ceil(totalMinutes / 60.0);
         double basePrice = totalHours * parking.getHourlyRate();
         
-        // Add the strategy
+        // Add the strategy to calculate the tinal price
         
         return Final Price;
     }
