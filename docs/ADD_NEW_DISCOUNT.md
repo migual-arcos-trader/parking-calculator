@@ -18,6 +18,7 @@ public enum DiscountType {
     NO_DISCOUNT("No discount"),
     MAX_DAILY_15("Maximum 15€ per day"), 
     MAX_12H_20_HOURS_FREE("Maximum 20€ per 12 hours, with hours free"),
+    // Add the new discount type
     NEW_DISCOUNT_TYPE_STRATEGY("New discount type strategy description");
 
     private final String description;
@@ -48,20 +49,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class NewDiscountTypeStrategy implements DiscountStrategy {
 
-    private static final int MAX_HOURLY_RATE = 50;
-    private static final int FREE_HOURS = 2;
+    // Add varaibles and constants
 
     @Override
     public double calculateFinalPrice(Parking parking, long totalMinutes) {
         double totalHours = Math.ceil(totalMinutes / 60.0);
         double basePrice = totalHours * parking.getHourlyRate();
         
-        // Example: First 2 hours free, then normal rate with max cap
-        double freeHours = Math.min(FREE_HOURS, totalHours);
-        double paidHours = Math.max(0, totalHours - freeHours);
-        double calculatedPrice = paidHours * parking.getHourlyRate();
+        // Add the strategy
         
-        return Math.min(calculatedPrice, MAX_HOURLY_RATE * paidHours);
+        return Final Price;
     }
 
     @Override
