@@ -7,6 +7,8 @@ This document explains how to add new discount strategies to the Parking Calcula
 
 ### 1. Add New Discount Type to Enum
 
+[🎯 DiscountType.java](../src/main/java/com/paymeter/parking_calculator/domain/model/DiscountType.java)
+
 ```
 package com.paymeter.parking_calculator.domain.model;
 
@@ -40,6 +42,10 @@ public enum DiscountType {
 
 ### 2. Create Discount Strategy Implementation
 
+From [🎯 DiscountStrategy.java](../src/main/java/com/paymeter/parking_calculator/domain/service/discount/DiscountStrategy.java)
+
+Create the new implementation
+
 ```
 package com.paymeter.parking_calculator.domain.service.discount;
 
@@ -70,14 +76,14 @@ public class NewDiscountTypeStrategy implements DiscountStrategy {
 
 ### 3. Update Database with New Parking Configuration
 
-#### For new parking lots:
+#### For new parking lots at [📊 data.sql](../src/main/resources/data.sql) file:
 ```
 INSERT INTO parkings (id, hourly_rate, discount_name) 
 VALUES ('P999999', 5.00, 'NEW_DISCOUNT_TYPE_STRATEGY')
 ON CONFLICT (id) DO NOTHING;
 ```
 
-#### To update existing parking lots:
+#### To update existing parking lots at [📊 data.sql](../src/main/resources/data.sql) file:
 ```
 UPDATE parkings 
 SET discount_name = 'NEW_DISCOUNT_TYPE_STRATEGY', 
@@ -85,7 +91,7 @@ SET discount_name = 'NEW_DISCOUNT_TYPE_STRATEGY',
 WHERE id = 'P000123';
 ```
 
-### 4. Database Schema Reference
+### 4. Database Schema Reference at [📊 schema.sql](../src/main/resources/schema.sql)
 
 ```
 CREATE TABLE parkings (
