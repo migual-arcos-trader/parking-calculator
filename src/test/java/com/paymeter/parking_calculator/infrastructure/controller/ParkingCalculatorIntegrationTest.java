@@ -36,7 +36,7 @@ class ParkingCalculatorIntegrationTest {
     }
 
     @Test
-    void calculatePrice_ValidRequest_ReturnsCorrectPrice() {
+    void calculatePriceValidRequestReturnsCorrectPrice() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -56,7 +56,7 @@ class ParkingCalculatorIntegrationTest {
     }
 
     @Test
-    void calculatePrice_InvalidParkingId_ReturnsNotFound() {
+    void calculatePriceInvalidParkingIdReturnsNotFound() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -74,7 +74,7 @@ class ParkingCalculatorIntegrationTest {
     }
 
     @Test
-    void calculatePrice_MissingRequiredField_ReturnsBadRequest() {
+    void calculatePriceMissingRequiredFieldReturnsBadRequest() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
