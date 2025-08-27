@@ -1,4 +1,4 @@
-package com.paymeter.parking_calculator.domain.service;
+package com.paymeter.parking_calculator.domain.service.model.constants;
 
 public final class TestConstants {
 

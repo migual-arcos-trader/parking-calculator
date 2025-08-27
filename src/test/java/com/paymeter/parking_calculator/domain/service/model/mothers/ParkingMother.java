@@ -1,7 +1,7 @@
-package com.paymeter.parking_calculator.domain.service.model;
+package com.paymeter.parking_calculator.domain.service.model.mothers;
 
-import com.paymeter.parking_calculator.domain.service.TestConstants;
 import com.paymeter.parking_calculator.domain.model.Parking;
+import com.paymeter.parking_calculator.domain.service.model.constants.TestConstants;
 
 public final class ParkingMother {
 

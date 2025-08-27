@@ -1,4 +1,6 @@
-package com.paymeter.parking_calculator.domain.service;
+package com.paymeter.parking_calculator.domain.service.model.mothers;
+
+import com.paymeter.parking_calculator.domain.service.model.constants.TestConstants;
 
 import java.time.LocalDateTime;
 
