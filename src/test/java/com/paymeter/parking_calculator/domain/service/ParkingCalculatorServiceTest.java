@@ -7,6 +7,7 @@ import com.paymeter.parking_calculator.domain.port.ParkingRepositoryPort;
 import com.paymeter.parking_calculator.domain.service.calculator.ParkingCalculatorService;
 import com.paymeter.parking_calculator.domain.service.discount.DiscountStrategy;
 import com.paymeter.parking_calculator.domain.service.discount.DiscountStrategyFactory;
+import com.paymeter.parking_calculator.domain.service.model.ParkingMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,14 +43,12 @@ class ParkingCalculatorServiceTest {
     private ParkingCalculatorService parkingCalculatorService;
 
     private Parking client1Parking;
+    private LocalDateTime february27_9am;
 
     @BeforeEach
     void setUp() {
-        client1Parking = Parking.builder()
-                .id("P000123")
-                .hourlyRate(2.0)
-                .discountName("MAX_DAILY_15")
-                .build();
+        client1Parking = ParkingMother.createClient1Parking();
+        february27_9am = DateTimeMother.createFebruary27_9am();
     }
 
     private void setupDiscountStrategyMocks() {
@@ -65,181 +64,166 @@ class ParkingCalculatorServiceTest {
 
     @Test
     @DisplayName("Should return free parking when duration is less than 1 minute")
-    void calculatePriceDurationLessThanOneMinuteShouldReturnFree() {
+    void calculatePrice_DurationLessThanOneMinute_ShouldReturnFree() {
         // Arrange
-        when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(1);
-        when(parkingRepositoryPort.findById("P000123")).thenReturn(Optional.of(client1Parking));
+        when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(TestConstants.FREE_MINUTES_THRESHOLD);
+        when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
 
-        LocalDateTime from = LocalDateTime.of(2024, 2, 27, 9, 0);
-        LocalDateTime to = from.plusSeconds(30);
+        LocalDateTime to = DateTimeMother.createDateTimeWithSecondsAdded(february27_9am, TestConstants.THIRTY_MINUTES);
 
         // Act
-        var result = parkingCalculatorService.calculatePrice("P000123", from, to);
+        var result = parkingCalculatorService.calculatePrice(TestConstants.PARKING_ID_1, february27_9am, to);
 
         // Assert
-        assertEquals("0.00 EUR", result.getPrice());
+        assertEquals(TestConstants.PRICE_0_EUR, result.getPrice());
         assertEquals(0, result.getDuration());
-        assertEquals(from, result.getFrom());
+        assertEquals(february27_9am, result.getFrom());
         assertEquals(to, result.getTo());
     }
 
     @Test
     @DisplayName("Should charge for 1 hour when duration is 30 minutes (fraction rounds up)")
-    void calculatePrice30MinutesShouldChargeFor1Hour() {
+    void calculatePrice_30Minutes_ShouldChargeFor1Hour() {
         // Arrange
-        when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(1);
-        when(parkingRepositoryPort.findById("P000123")).thenReturn(Optional.of(client1Parking));
-        this.setupDiscountStrategyMocks();
+        when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(TestConstants.FREE_MINUTES_THRESHOLD);
+        when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
+        setupDiscountStrategyMocks();
 
-        LocalDateTime from = LocalDateTime.of(2024, 2, 27, 9, 0);
-        LocalDateTime to = from.plusMinutes(30);
+        LocalDateTime to = DateTimeMother.createDateTimeWithMinutesAdded(february27_9am, TestConstants.THIRTY_MINUTES);
 
         // Act
-        var result = parkingCalculatorService.calculatePrice("P000123", from, to);
+        var result = parkingCalculatorService.calculatePrice(TestConstants.PARKING_ID_1, february27_9am, to);
 
         // Assert
-        assertEquals("2.00 EUR", result.getPrice());
-        assertEquals(30, result.getDuration());
+        assertEquals(TestConstants.PRICE_2_EUR, result.getPrice());
+        assertEquals(TestConstants.THIRTY_MINUTES, result.getDuration());
     }
 
     @Test
     @DisplayName("Should charge for 1 hour when duration is 59 minutes (fraction rounds up)")
-    void calculatePrice59MinutesShouldChargeFor1Hour() {
+    void calculatePrice_59Minutes_ShouldChargeFor1Hour() {
         // Arrange
-        when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(1);
-        when(parkingRepositoryPort.findById("P000123")).thenReturn(Optional.of(client1Parking));
-        this.setupDiscountStrategyMocks();
+        when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(TestConstants.FREE_MINUTES_THRESHOLD);
+        when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
+        setupDiscountStrategyMocks();
 
-        LocalDateTime from = LocalDateTime.of(2024, 2, 27, 9, 0);
-        LocalDateTime to = from.plusMinutes(59);
+        LocalDateTime to = DateTimeMother.createDateTimeWithMinutesAdded(february27_9am, TestConstants.FIFTY_NINE_MINUTES);
 
         // Act
-        var result = parkingCalculatorService.calculatePrice("P000123", from, to);
+        var result = parkingCalculatorService.calculatePrice(TestConstants.PARKING_ID_1, february27_9am, to);
 
         // Assert
-        assertEquals("2.00 EUR", result.getPrice());
-        assertEquals(59, result.getDuration());
+        assertEquals(TestConstants.PRICE_2_EUR, result.getPrice());
+        assertEquals(TestConstants.FIFTY_NINE_MINUTES, result.getDuration());
     }
 
     @Test
     @DisplayName("Should charge for 2 hours when duration is 61 minutes (fraction rounds up)")
-    void calculatePrice61MinutesShouldChargeFor2Hours() {
+    void calculatePrice_61Minutes_ShouldChargeFor2Hours() {
         // Arrange
-        when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(1);
-        when(parkingRepositoryPort.findById("P000123")).thenReturn(Optional.of(client1Parking));
-        this.setupDiscountStrategyMocks();
+        when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(TestConstants.FREE_MINUTES_THRESHOLD);
+        when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
+        setupDiscountStrategyMocks();
 
-        LocalDateTime from = LocalDateTime.of(2024, 2, 27, 9, 0);
-        LocalDateTime to = from.plusMinutes(61);
+        LocalDateTime to = DateTimeMother.createDateTimeWithMinutesAdded(february27_9am, TestConstants.SIXTY_ONE_MINUTES);
 
         // Act
-        var result = parkingCalculatorService.calculatePrice("P000123", from, to);
+        var result = parkingCalculatorService.calculatePrice(TestConstants.PARKING_ID_1, february27_9am, to);
 
         // Assert
-        assertEquals("4.00 EUR", result.getPrice());
-        assertEquals(61, result.getDuration());
+        assertEquals(TestConstants.PRICE_4_EUR, result.getPrice());
+        assertEquals(TestConstants.SIXTY_ONE_MINUTES, result.getDuration());
     }
 
     @Test
     @DisplayName("Should charge for exact hours without rounding")
-    void calculatePriceExact2HoursShouldChargeFor2Hours() {
+    void calculatePrice_Exact2Hours_ShouldChargeFor2Hours() {
         // Arrange
-        when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(1);
-        when(parkingRepositoryPort.findById("P000123")).thenReturn(Optional.of(client1Parking));
-        this.setupDiscountStrategyMocks();
+        when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(TestConstants.FREE_MINUTES_THRESHOLD);
+        when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
+        setupDiscountStrategyMocks();
 
-        LocalDateTime from = LocalDateTime.of(2024, 2, 27, 9, 0);
-        LocalDateTime to = from.plusHours(2);
+        LocalDateTime to = DateTimeMother.createDateTimeWithHoursAdded(february27_9am, 2);
 
         // Act
-        var result = parkingCalculatorService.calculatePrice("P000123", from, to);
+        var result = parkingCalculatorService.calculatePrice(TestConstants.PARKING_ID_1, february27_9am, to);
 
         // Assert
-        assertEquals("4.00 EUR", result.getPrice());
-        assertEquals(120, result.getDuration());
+        assertEquals(TestConstants.PRICE_4_EUR, result.getPrice());
+        assertEquals(TestConstants.TWO_HOURS_MINUTES, result.getDuration());
     }
 
     @Test
     @DisplayName("Should handle maximum possible duration without overflow")
-    void calculatePriceMaximumDurationShouldHandleWithoutOverflow() {
+    void calculatePrice_MaximumDuration_ShouldHandleWithoutOverflow() {
         // Arrange
-        when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(1);
-        when(parkingRepositoryPort.findById("P000123")).thenReturn(Optional.of(client1Parking));
-        this.setupDiscountStrategyMocks();
-
-        LocalDateTime from = LocalDateTime.MIN;
-        LocalDateTime to = LocalDateTime.MAX;
+        when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(TestConstants.FREE_MINUTES_THRESHOLD);
+        when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
+        setupDiscountStrategyMocks();
 
         // Act & Assert
         assertDoesNotThrow(() -> {
-            var result = parkingCalculatorService.calculatePrice("P000123", from, to);
+            var result = parkingCalculatorService.calculatePrice(TestConstants.PARKING_ID_1, LocalDateTime.MIN, LocalDateTime.MAX);
             assertNotNull(result);
         });
     }
 
     @Test
     @DisplayName("Should handle zero duration when 'from' equals 'to'")
-    void calculatePriceFromEqualsToShouldReturnFree() {
+    void calculatePrice_FromEqualsTo_ShouldReturnFree() {
         // Arrange
-        when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(1);
-        when(parkingRepositoryPort.findById("P000123")).thenReturn(Optional.of(client1Parking));
-
-        LocalDateTime from = LocalDateTime.of(2024, 2, 27, 9, 0);
+        when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(TestConstants.FREE_MINUTES_THRESHOLD);
+        when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
 
         // Act
-        var result = parkingCalculatorService.calculatePrice("P000123", from, from);
+        var result = parkingCalculatorService.calculatePrice(TestConstants.PARKING_ID_1, february27_9am, february27_9am);
 
         // Assert
-        assertEquals("0.00 EUR", result.getPrice());
+        assertEquals(TestConstants.PRICE_0_EUR, result.getPrice());
         assertEquals(0, result.getDuration());
     }
 
     @Test
     @DisplayName("Should throw ParkingNotFoundException when parking ID does not exist")
-    void calculatePriceNonExistentParkingIdShouldThrowParkingNotFoundException() {
+    void calculatePrice_NonExistentParkingId_ShouldThrowParkingNotFoundException() {
         // Arrange
-        String nonExistentParkingId = "NON_EXISTENT";
-        LocalDateTime from = LocalDateTime.of(2024, 2, 27, 9, 0);
-        LocalDateTime to = from.plusHours(1);
+        LocalDateTime to = DateTimeMother.createDateTimeWithHoursAdded(february27_9am, 1);
 
-        when(parkingRepositoryPort.findById(nonExistentParkingId)).thenReturn(Optional.empty());
+        when(parkingRepositoryPort.findById(TestConstants.NON_EXISTENT_PARKING_ID)).thenReturn(Optional.empty());
 
         // Act & Assert
         ParkingNotFoundException exception = assertThrows(ParkingNotFoundException.class,
-                () -> parkingCalculatorService.calculatePrice(nonExistentParkingId, from, to));
+                () -> parkingCalculatorService.calculatePrice(TestConstants.NON_EXISTENT_PARKING_ID, february27_9am, to));
 
         assertEquals("Parking id not found", exception.getMessage());
     }
 
     @Test
     @DisplayName("Should throw IllegalArgumentException when 'from' date is after 'to' date")
-    void calculatePriceFromAfterToShouldThrowIllegalArgumentException() {
+    void calculatePrice_FromAfterTo_ShouldThrowIllegalArgumentException() {
         // Arrange
-        when(parkingRepositoryPort.findById("P000123")).thenReturn(Optional.of(client1Parking));
+        when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
 
-        LocalDateTime from = LocalDateTime.of(2024, 2, 27, 10, 0);
-        LocalDateTime to = LocalDateTime.of(2024, 2, 27, 9, 59);
+        LocalDateTime from = DateTimeMother.createFebruary27_10am();
+        LocalDateTime to = DateTimeMother.createFebruary27_9_59am();
 
         // Act & Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> parkingCalculatorService.calculatePrice("P000123", from, to));
+                () -> parkingCalculatorService.calculatePrice(TestConstants.PARKING_ID_1, from, to));
 
         assertEquals("Invalid date range: 'from' cannot be after 'to'", exception.getMessage());
     }
 
     @Test
     @DisplayName("Should throw IllegalArgumentException when 'from' is null")
-    void calculatePriceNullFromShouldThrowIllegalArgumentException() {
+    void calculatePrice_NullFrom_ShouldThrowIllegalArgumentException() {
         // Arrange
-        when(parkingRepositoryPort.findById("P000123")).thenReturn(Optional.of(client1Parking));
-
-        LocalDateTime to = LocalDateTime.of(2024, 2, 27, 9, 0);
+        when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
 
         // Act & Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> parkingCalculatorService.calculatePrice("P000123", null, to));
+                () -> parkingCalculatorService.calculatePrice(TestConstants.PARKING_ID_1, null, february27_9am));
 
         assertEquals("Invalid date range: 'from' is null", exception.getMessage());
     }
-
 }
