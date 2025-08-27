@@ -20,6 +20,7 @@ import java.util.Objects;
 @Slf4j
 public class ParkingCalculatorService implements ParkingCalculatorPort {
 
+    public static final int FORMAT_PRICE_BASE = 100;
     private final ParkingRepositoryPort parkingRepositoryPort;
     private final ParkingConfigProperties parkingConfigProperties;
     private final DiscountStrategyFactory discountStrategyFactory;
@@ -80,9 +81,9 @@ public class ParkingCalculatorService implements ParkingCalculatorPort {
     }
 
     private String formatPrice(double price) {
-        int amountInCents = (int) Math.round(price * 100);
-        int euros = amountInCents / 100;
-        int cents = amountInCents % 100;
+        int amountInCents = (int) Math.round(price * FORMAT_PRICE_BASE);
+        int euros = amountInCents / FORMAT_PRICE_BASE;
+        int cents = amountInCents % FORMAT_PRICE_BASE;
         return String.format("%d.%02d EUR", euros, cents);
     }
 

@@ -11,13 +11,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class Max12HHoursFreeStrategy implements DiscountStrategy {
 
+    public static final double INIT_TOTAL_PRICE = 0.0;
     private static final int HOURS_FREE = 1;
     private static final int MAX_12H_PRICE = 20;
 
     @Override
     public double calculateFinalPrice(Parking parking, long totalMinutes) {
         double totalHours = TimeUtil.calculateTotalHours(totalMinutes);
-        double totalPrice = 0.0;
+        double totalPrice = INIT_TOTAL_PRICE;
         if (totalHours > HOURS_FREE) {
             totalHours -= HOURS_FREE;
             totalPrice = CalculatorPriceUtil.getTotalPriceWithMaxTime(
