@@ -51,4 +51,5 @@ public final class DateTimeMother {
     public static LocalDateTime createDateTimeWithHoursAdded(LocalDateTime baseTime, int hoursToAdd) {
         return baseTime.plusHours(hoursToAdd);
     }
+
 }

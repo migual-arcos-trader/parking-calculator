@@ -9,6 +9,14 @@ public final class ParkingMother {
         // Utility class
     }
 
+    public static Parking createClient0Parking() {
+        return Parking.builder()
+                .id(TestConstants.PARKING_ID_3)
+                .hourlyRate(TestConstants.HOURLY_RATE_5_EURO)
+                .discountName(TestConstants.DISCOUNT_NONE)
+                .build();
+    }
+
     public static Parking createClient1Parking() {
         return Parking.builder()
                 .id(TestConstants.PARKING_ID_1)
