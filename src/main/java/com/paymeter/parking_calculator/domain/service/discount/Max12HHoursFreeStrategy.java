@@ -3,12 +3,11 @@ package com.paymeter.parking_calculator.domain.service.discount;
 import com.paymeter.parking_calculator.application.commons.constants.Hours;
 import com.paymeter.parking_calculator.application.helpers.CalculatorPriceHelper;
 import com.paymeter.parking_calculator.application.helpers.TimeHelper;
-import com.paymeter.parking_calculator.domain.model.DiscountType;
 import com.paymeter.parking_calculator.domain.model.Parking;
 import org.springframework.stereotype.Component;
 
 
-@Component
+@Component("max12h20HoursFreeStrategy")
 public class Max12HHoursFreeStrategy implements DiscountStrategy {
 
     public static final double INIT_TOTAL_PRICE = 0.0;
@@ -28,11 +27,6 @@ public class Max12HHoursFreeStrategy implements DiscountStrategy {
                     MAX_12H_PRICE);
         }
         return totalPrice;
-    }
-
-    @Override
-    public boolean supports(String discountType) {
-        return DiscountType.MAX_12H_20_HOURS_FREE.name().equalsIgnoreCase(discountType);
     }
 
 }

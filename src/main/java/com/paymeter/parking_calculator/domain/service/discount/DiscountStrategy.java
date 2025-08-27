@@ -6,6 +6,4 @@ public interface DiscountStrategy {
 
     double calculateFinalPrice(Parking parking, long totalMinutes);
 
-    boolean supports(String discountType);
-
 }

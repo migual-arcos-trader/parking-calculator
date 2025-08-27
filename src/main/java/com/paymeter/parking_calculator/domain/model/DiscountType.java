@@ -1,18 +1,21 @@
 package com.paymeter.parking_calculator.domain.model;
 
+import com.paymeter.parking_calculator.domain.exception.UnsupportedDiscountException;
 import lombok.Getter;
 
 @Getter
 public enum DiscountType {
 
-    NO_DISCOUNT("No discount"),
-    MAX_DAILY_15("Maximum 15€ per day"),
-    MAX_12H_20_HOURS_FREE("Maximum 20€ per 12 hours, with hours free");
+    NO_DISCOUNT("No discount", "noDiscountStrategy"),
+    MAX_DAILY_15("Maximum 15€ per day", "maxDaily15Strategy"),
+    MAX_12H_20_HOURS_FREE("Maximum 20€ per 12 hours, with hours free", "max12h20HoursFreeStrategy");
 
     private final String description;
+    private final String strategyBeanName;
 
-    DiscountType(String description) {
+    DiscountType(String description, String strategyBeanName) {
         this.description = description;
+        this.strategyBeanName = strategyBeanName;
     }
 
     public static DiscountType fromString(String value) {
@@ -21,7 +24,6 @@ public enum DiscountType {
                 return type;
             }
         }
-        throw new IllegalArgumentException("Unknown discount type: " + value);
+        throw new UnsupportedDiscountException("Unknown discount type: " + value);
     }
-
 }
