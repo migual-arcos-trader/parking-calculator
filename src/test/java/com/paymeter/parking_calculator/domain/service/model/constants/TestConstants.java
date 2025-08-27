@@ -20,7 +20,7 @@ public final class TestConstants {
     // Discount Names
     public static final String DISCOUNT_MAX_DAILY_15 = "MAX_DAILY_15";
     public static final String DISCOUNT_MAX_12H_20_FREE = "MAX_12H_20_HOURS_FREE";
-    public static final String DISCOUNT_NONE = "NONE";
+    public static final String DISCOUNT_NO_DISCOUNT = "NO_DISCOUNT";
 
     // Time Constants (minutes)
     public static final int FREE_MINUTES_THRESHOLD = 1;

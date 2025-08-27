@@ -13,7 +13,7 @@ public final class ParkingMother {
         return Parking.builder()
                 .id(TestConstants.PARKING_ID_0)
                 .hourlyRate(TestConstants.HOURLY_RATE_5_EURO)
-                .discountName(TestConstants.DISCOUNT_NONE)
+                .discountName(TestConstants.DISCOUNT_NO_DISCOUNT)
                 .build();
     }
 
