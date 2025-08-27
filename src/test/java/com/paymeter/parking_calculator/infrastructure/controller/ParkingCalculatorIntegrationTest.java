@@ -1,6 +1,7 @@
 package com.paymeter.parking_calculator.infrastructure.controller;
 
 import com.paymeter.parking_calculator.domain.service.model.constants.IntegrationTestConstants;
+import com.paymeter.parking_calculator.infrastructure.mothers.HeadersMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,7 @@ class ParkingCalculatorIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers = HeadersMother.createHttpHeadersApplicationJson();
     }
 
     @Test
