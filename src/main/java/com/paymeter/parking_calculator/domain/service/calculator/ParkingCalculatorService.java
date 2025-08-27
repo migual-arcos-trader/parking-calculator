@@ -1,6 +1,7 @@
 package com.paymeter.parking_calculator.domain.service.calculator;
 
 import com.paymeter.parking_calculator.domain.config.ParkingConfigProperties;
+import com.paymeter.parking_calculator.domain.exception.InvalidDateRangeException;
 import com.paymeter.parking_calculator.domain.exception.ParkingNotFoundException;
 import com.paymeter.parking_calculator.domain.model.Parking;
 import com.paymeter.parking_calculator.domain.model.ParkingCalculation;
@@ -21,6 +22,7 @@ import java.util.Objects;
 public class ParkingCalculatorService implements ParkingCalculatorPort {
 
     public static final int FORMAT_PRICE_BASE = 100;
+    public static final double FREE_MINUTES = 0.0;
     private final ParkingRepositoryPort parkingRepositoryPort;
     private final ParkingConfigProperties parkingConfigProperties;
     private final DiscountStrategyFactory discountStrategyFactory;
@@ -28,12 +30,18 @@ public class ParkingCalculatorService implements ParkingCalculatorPort {
     @Override
     public ParkingCalculation calculatePrice(String parkingId, LocalDateTime from, LocalDateTime to) {
         log.info("Calculating price for parkingId: {}, from: {}, to: {}", parkingId, from, to);
-        Parking parking = this.getParking(parkingId);
         LocalDateTime endTime = this.getEndTime(to);
         this.validateFromAndEndTime(from, endTime);
         long totalMinutes = this.getTotalMinutes(from, endTime);
+        Parking parking = this.getParking(parkingId);
         double totalPrice = this.calculateTotalPrice(parking, totalMinutes);
-        return buildParkingCalculation(parking.getId(), from, endTime, (int) totalMinutes, totalPrice);
+        return ParkingCalculation.builder()
+                .parkingId(parkingId)
+                .from(from)
+                .to(to)
+                .duration((int) totalMinutes)
+                .price(formatPrice(totalPrice))
+                .build();
     }
 
     private Parking getParking(String parkingId) {
@@ -49,14 +57,9 @@ public class ParkingCalculatorService implements ParkingCalculatorPort {
     }
 
     private void validateFromAndEndTime(LocalDateTime from, LocalDateTime endTime) {
-        if (Objects.isNull(from)) {
-            log.info("Invalid date range: from is null");
-            throw new IllegalArgumentException("Invalid date range: 'from' is null");
-        }
-
         if (from.isAfter(endTime)) {
             log.info("Invalid date range: from {} is after to {}", from, endTime);
-            throw new IllegalArgumentException("Invalid date range: 'from' cannot be after 'to'");
+            throw new InvalidDateRangeException("Invalid date range: 'from' cannot be after 'to'");
         }
     }
 
@@ -66,18 +69,8 @@ public class ParkingCalculatorService implements ParkingCalculatorPort {
 
     private double calculateTotalPrice(Parking parking, long totalMinutes) {
         return totalMinutes < parkingConfigProperties.getFreeMinutesThreshold() ?
-                0.0 :
+                FREE_MINUTES :
                 discountStrategyFactory.getStrategy(parking.getDiscountName()).calculateFinalPrice(parking, totalMinutes);
-    }
-
-    private ParkingCalculation buildParkingCalculation(String parkingId, LocalDateTime from, LocalDateTime to, int duration, double totalPrice) {
-        return ParkingCalculation.builder()
-                .parkingId(parkingId)
-                .from(from)
-                .to(to)
-                .duration(duration)
-                .price(formatPrice(totalPrice))
-                .build();
     }
 
     private String formatPrice(double price) {

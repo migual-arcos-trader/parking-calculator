@@ -1,6 +1,7 @@
 package com.paymeter.parking_calculator.domain.service;
 
 import com.paymeter.parking_calculator.domain.config.ParkingConfigProperties;
+import com.paymeter.parking_calculator.domain.exception.InvalidDateRangeException;
 import com.paymeter.parking_calculator.domain.exception.ParkingNotFoundException;
 import com.paymeter.parking_calculator.domain.model.Parking;
 import com.paymeter.parking_calculator.domain.port.ParkingRepositoryPort;
@@ -64,7 +65,7 @@ class ParkingCalculatorServiceTest {
 
     @Test
     @DisplayName("Should return free parking when duration is less than 1 minute")
-    void calculatePrice_DurationLessThanOneMinute_ShouldReturnFree() {
+    void calculatePriceDurationLessThanOneMinuteShouldReturnFree() {
         // Arrange
         when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(TestConstants.FREE_MINUTES_THRESHOLD);
         when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
@@ -83,7 +84,7 @@ class ParkingCalculatorServiceTest {
 
     @Test
     @DisplayName("Should charge for 1 hour when duration is 30 minutes (fraction rounds up)")
-    void calculatePrice_30Minutes_ShouldChargeFor1Hour() {
+    void calculatePrice30MinutesShouldChargeFor1Hour() {
         // Arrange
         when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(TestConstants.FREE_MINUTES_THRESHOLD);
         when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
@@ -101,7 +102,7 @@ class ParkingCalculatorServiceTest {
 
     @Test
     @DisplayName("Should charge for 1 hour when duration is 59 minutes (fraction rounds up)")
-    void calculatePrice_59Minutes_ShouldChargeFor1Hour() {
+    void calculatePrice59MinutesShouldChargeFor1Hour() {
         // Arrange
         when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(TestConstants.FREE_MINUTES_THRESHOLD);
         when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
@@ -119,7 +120,7 @@ class ParkingCalculatorServiceTest {
 
     @Test
     @DisplayName("Should charge for 2 hours when duration is 61 minutes (fraction rounds up)")
-    void calculatePrice_61Minutes_ShouldChargeFor2Hours() {
+    void calculatePrice61MinutesShouldChargeFor2Hours() {
         // Arrange
         when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(TestConstants.FREE_MINUTES_THRESHOLD);
         when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
@@ -137,7 +138,7 @@ class ParkingCalculatorServiceTest {
 
     @Test
     @DisplayName("Should charge for exact hours without rounding")
-    void calculatePrice_Exact2Hours_ShouldChargeFor2Hours() {
+    void calculatePriceExact2HoursShouldChargeFor2Hours() {
         // Arrange
         when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(TestConstants.FREE_MINUTES_THRESHOLD);
         when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
@@ -155,7 +156,7 @@ class ParkingCalculatorServiceTest {
 
     @Test
     @DisplayName("Should handle maximum possible duration without overflow")
-    void calculatePrice_MaximumDuration_ShouldHandleWithoutOverflow() {
+    void calculatePriceMaximumDurationShouldHandleWithoutOverflow() {
         // Arrange
         when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(TestConstants.FREE_MINUTES_THRESHOLD);
         when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
@@ -170,7 +171,7 @@ class ParkingCalculatorServiceTest {
 
     @Test
     @DisplayName("Should handle zero duration when 'from' equals 'to'")
-    void calculatePrice_FromEqualsTo_ShouldReturnFree() {
+    void calculatePriceFromEqualsToShouldReturnFree() {
         // Arrange
         when(parkingConfigProperties.getFreeMinutesThreshold()).thenReturn(TestConstants.FREE_MINUTES_THRESHOLD);
         when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
@@ -185,7 +186,7 @@ class ParkingCalculatorServiceTest {
 
     @Test
     @DisplayName("Should throw ParkingNotFoundException when parking ID does not exist")
-    void calculatePrice_NonExistentParkingId_ShouldThrowParkingNotFoundException() {
+    void calculatePriceNonExistentParkingIdShouldThrowParkingNotFoundException() {
         // Arrange
         LocalDateTime to = DateTimeMother.createDateTimeWithHoursAdded(february27_9am, 1);
 
@@ -200,30 +201,16 @@ class ParkingCalculatorServiceTest {
 
     @Test
     @DisplayName("Should throw IllegalArgumentException when 'from' date is after 'to' date")
-    void calculatePrice_FromAfterTo_ShouldThrowIllegalArgumentException() {
+    void calculatePriceFromAfterToShouldThrowIllegalArgumentException() {
         // Arrange
-        when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
-
         LocalDateTime from = DateTimeMother.createFebruary27_10am();
         LocalDateTime to = DateTimeMother.createFebruary27_9_59am();
 
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        InvalidDateRangeException exception = assertThrows(InvalidDateRangeException.class,
                 () -> parkingCalculatorService.calculatePrice(TestConstants.PARKING_ID_1, from, to));
 
         assertEquals("Invalid date range: 'from' cannot be after 'to'", exception.getMessage());
     }
 
-    @Test
-    @DisplayName("Should throw IllegalArgumentException when 'from' is null")
-    void calculatePrice_NullFrom_ShouldThrowIllegalArgumentException() {
-        // Arrange
-        when(parkingRepositoryPort.findById(TestConstants.PARKING_ID_1)).thenReturn(Optional.of(client1Parking));
-
-        // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> parkingCalculatorService.calculatePrice(TestConstants.PARKING_ID_1, null, february27_9am));
-
-        assertEquals("Invalid date range: 'from' is null", exception.getMessage());
-    }
 }
