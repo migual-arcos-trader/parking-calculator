@@ -200,8 +200,8 @@ class ParkingCalculatorServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw IllegalArgumentException when 'from' date is after 'to' date")
-    void calculatePriceFromAfterToShouldThrowIllegalArgumentException() {
+    @DisplayName("Should throw InvalidDateRangeException when 'from' date is after 'to' date")
+    void calculatePriceFromAfterToShouldThrowInvalidDateRangeException() {
         // Arrange
         LocalDateTime from = DateTimeMother.createFebruary27_10am();
         LocalDateTime to = DateTimeMother.createFebruary27_9_59am();

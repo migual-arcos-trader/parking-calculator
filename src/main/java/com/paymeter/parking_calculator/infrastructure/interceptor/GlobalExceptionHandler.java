@@ -1,6 +1,8 @@
 package com.paymeter.parking_calculator.infrastructure.interceptor;
 
+import com.paymeter.parking_calculator.domain.exception.InvalidDateRangeException;
 import com.paymeter.parking_calculator.domain.exception.ParkingNotFoundException;
+import com.paymeter.parking_calculator.domain.exception.UnsupportedDiscountException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
+    @ExceptionHandler(InvalidDateRangeException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidDateRangeException(InvalidDateRangeException ex) {
+        log.error(ex.getMessage());
+        return ResponseEntity.badRequest()
+                .body(Map.of(ERROR, ex.getMessage()));
+    }
+
     @ExceptionHandler(ParkingNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleParkingNotFoundException(ParkingNotFoundException ex) {
         log.error(ex.getMessage());
@@ -33,8 +42,8 @@ public class GlobalExceptionHandler {
                 .body(Map.of(ERROR, ex.getMessage()));
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
+    @ExceptionHandler(UnsupportedDiscountException.class)
+    public ResponseEntity<Map<String, String>> handleUnsupportedDiscountException(UnsupportedDiscountException ex) {
         log.error(ex.getMessage());
         return ResponseEntity.badRequest()
                 .body(Map.of(ERROR, ex.getMessage()));
