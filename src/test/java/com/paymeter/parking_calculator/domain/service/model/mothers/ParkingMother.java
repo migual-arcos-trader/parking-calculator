@@ -17,4 +17,12 @@ public final class ParkingMother {
                 .build();
     }
 
+    public static Parking createClient2Parking() {
+        return Parking.builder()
+                .id(TestConstants.PARKING_ID_2)
+                .hourlyRate(TestConstants.HOURLY_RATE_3_EURO)
+                .discountName(TestConstants.DISCOUNT_MAX_12H_20_FREE)
+                .build();
+    }
+
 }

@@ -8,13 +8,16 @@ public final class TestConstants {
 
     // Parking IDs
     public static final String PARKING_ID_1 = "P000123";
+    public static final String PARKING_ID_2 = "P000456";
     public static final String NON_EXISTENT_PARKING_ID = "NON_EXISTENT";
 
     // Hourly Rates
     public static final double HOURLY_RATE_2_EURO = 2.0;
+    public static final double HOURLY_RATE_3_EURO = 3.0;
 
     // Discount Names
     public static final String DISCOUNT_MAX_DAILY_15 = "MAX_DAILY_15";
+    public static final String DISCOUNT_MAX_12H_20_FREE = "MAX_12H_20_HOURS_FREE";
 
     // Time Constants
     public static final int FREE_MINUTES_THRESHOLD = 1;
@@ -26,6 +29,7 @@ public final class TestConstants {
     // Price Expectations
     public static final String PRICE_0_EUR = "0.00 EUR";
     public static final String PRICE_2_EUR = "2.00 EUR";
+    public static final String PRICE_3_EUR = "3.00 EUR";
     public static final String PRICE_4_EUR = "4.00 EUR";
 
     // Date Constants
@@ -36,5 +40,4 @@ public final class TestConstants {
     public static final int HOUR_10 = 10;
     public static final int MINUTE_0 = 0;
     public static final int MINUTE_59 = 59;
-
 }
