@@ -1,6 +1,6 @@
-package com.paymeter.parking_calculator.application.utils;
+package com.paymeter.parking_calculator.application.helpers;
 
-public class CalculatorPriceUtil {
+public class CalculatorPriceHelper {
 
     public static final double INIT_TOTAL_PRICE_WITH_MAX_TIME = 0.0;
     public static final int POSITIVE_TIME = 0;

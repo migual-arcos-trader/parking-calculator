@@ -1,8 +1,8 @@
 package com.paymeter.parking_calculator.domain.service.discount;
 
 import com.paymeter.parking_calculator.application.commons.constants.Hours;
-import com.paymeter.parking_calculator.application.utils.CalculatorPriceUtil;
-import com.paymeter.parking_calculator.application.utils.TimeUtil;
+import com.paymeter.parking_calculator.application.helpers.CalculatorPriceHelper;
+import com.paymeter.parking_calculator.application.helpers.TimeHelper;
 import com.paymeter.parking_calculator.domain.model.DiscountType;
 import com.paymeter.parking_calculator.domain.model.Parking;
 import org.springframework.stereotype.Component;
@@ -14,9 +14,9 @@ public class MaxDaily15Strategy implements DiscountStrategy {
 
     @Override
     public double calculateFinalPrice(Parking parking, long totalMinutes) {
-        return CalculatorPriceUtil.getTotalPriceWithMaxTime(
+        return CalculatorPriceHelper.getTotalPriceWithMaxTime(
                 parking.getHourlyRate(),
-                TimeUtil.calculateTotalHours(totalMinutes),
+                TimeHelper.calculateTotalHours(totalMinutes),
                 Hours.TWENTY_FOUR_HOURS,
                 MAX_DAILY_PRICE);
     }

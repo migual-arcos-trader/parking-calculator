@@ -1,5 +1,6 @@
 package com.paymeter.parking_calculator.domain.service.calculator;
 
+import com.paymeter.parking_calculator.application.helpers.FormatsHelper;
 import com.paymeter.parking_calculator.domain.config.ParkingConfigProperties;
 import com.paymeter.parking_calculator.domain.exception.InvalidDateRangeException;
 import com.paymeter.parking_calculator.domain.exception.ParkingNotFoundException;
@@ -21,7 +22,6 @@ import java.util.Objects;
 @Slf4j
 public class ParkingCalculatorService implements ParkingCalculatorPort {
 
-    public static final int FORMAT_PRICE_BASE = 100;
     public static final double FREE_MINUTES = 0.0;
     private final ParkingRepositoryPort parkingRepositoryPort;
     private final ParkingConfigProperties parkingConfigProperties;
@@ -40,7 +40,7 @@ public class ParkingCalculatorService implements ParkingCalculatorPort {
                 .from(from)
                 .to(to)
                 .duration((int) totalMinutes)
-                .price(formatPrice(totalPrice))
+                .price(FormatsHelper.formatPrice(totalPrice))
                 .build();
     }
 
@@ -71,13 +71,6 @@ public class ParkingCalculatorService implements ParkingCalculatorPort {
         return totalMinutes < parkingConfigProperties.getFreeMinutesThreshold() ?
                 FREE_MINUTES :
                 discountStrategyFactory.getStrategy(parking.getDiscountName()).calculateFinalPrice(parking, totalMinutes);
-    }
-
-    private String formatPrice(double price) {
-        int amountInCents = (int) Math.round(price * FORMAT_PRICE_BASE);
-        int euros = amountInCents / FORMAT_PRICE_BASE;
-        int cents = amountInCents % FORMAT_PRICE_BASE;
-        return String.format("%d.%02d EUR", euros, cents);
     }
 
 }

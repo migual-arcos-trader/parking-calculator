@@ -1,6 +1,6 @@
-package com.paymeter.parking_calculator.application.utils;
+package com.paymeter.parking_calculator.application.helpers;
 
-public class TimeUtil {
+public class TimeHelper {
 
     public static final double ONE_HOUR = 60.0;
 

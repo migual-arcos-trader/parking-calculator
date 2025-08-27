@@ -1,8 +1,8 @@
 package com.paymeter.parking_calculator.domain.service.discount;
 
 import com.paymeter.parking_calculator.application.commons.constants.Hours;
-import com.paymeter.parking_calculator.application.utils.CalculatorPriceUtil;
-import com.paymeter.parking_calculator.application.utils.TimeUtil;
+import com.paymeter.parking_calculator.application.helpers.CalculatorPriceHelper;
+import com.paymeter.parking_calculator.application.helpers.TimeHelper;
 import com.paymeter.parking_calculator.domain.model.DiscountType;
 import com.paymeter.parking_calculator.domain.model.Parking;
 import org.springframework.stereotype.Component;
@@ -17,11 +17,11 @@ public class Max12HHoursFreeStrategy implements DiscountStrategy {
 
     @Override
     public double calculateFinalPrice(Parking parking, long totalMinutes) {
-        double totalHours = TimeUtil.calculateTotalHours(totalMinutes);
+        double totalHours = TimeHelper.calculateTotalHours(totalMinutes);
         double totalPrice = INIT_TOTAL_PRICE;
         if (totalHours > HOURS_FREE) {
             totalHours -= HOURS_FREE;
-            totalPrice = CalculatorPriceUtil.getTotalPriceWithMaxTime(
+            totalPrice = CalculatorPriceHelper.getTotalPriceWithMaxTime(
                     parking.getHourlyRate(),
                     totalHours,
                     Hours.TWELVE_HOURS,
