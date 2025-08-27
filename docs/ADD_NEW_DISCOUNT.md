@@ -12,21 +12,25 @@ This document explains how to add new discount strategies to the Parking Calcula
 ```
 package com.paymeter.parking_calculator.domain.model;
 
+import com.paymeter.parking_calculator.domain.exception.UnsupportedDiscountException;
 import lombok.Getter;
 
 @Getter
 public enum DiscountType {
 
-    NO_DISCOUNT("No discount"),
-    MAX_DAILY_15("Maximum 15€ per day"), 
-    MAX_12H_20_HOURS_FREE("Maximum 20€ per 12 hours, with hours free"),
-    // Add the new discount type
-    NEW_DISCOUNT_TYPE_STRATEGY("New discount type strategy description");
+    NO_DISCOUNT("No discount", "noDiscountStrategy"),
+    MAX_DAILY_15("Maximum 15€ per day", "maxDaily15Strategy"),
+    MAX_12H_20_HOURS_FREE("Maximum 20€ per 12 hours, with hours free", "max12h20HoursFreeStrategy");,
+    // Add the new discount type with description and bean name
+    // The bean is the hey for the EnumMap in the DiscountFactory
+    NEW_DISCOUNT_TYPE_STRATEGY("New discount type strategy description", "newDiscountTypeStrategy");
 
     private final String description;
+    private final String strategyBeanName;
 
-    DiscountType(String description) {
+    DiscountType(String description, String strategyBeanName) {
         this.description = description;
+        this.strategyBeanName = strategyBeanName;
     }
 
     public static DiscountType fromString(String value) {
@@ -35,9 +39,10 @@ public enum DiscountType {
                 return type;
             }
         }
-        throw new IllegalArgumentException("Unknown discount type: " + value);
+        throw new UnsupportedDiscountException("Unknown discount type: " + value);
     }
 }
+
 ```
 
 ### 2. Create Discount Strategy Implementation
@@ -49,10 +54,14 @@ Create the new implementation
 ```
 package com.paymeter.parking_calculator.domain.service.discount;
 
+import com.paymeter.parking_calculator.application.commons.constants.Hours;
+import com.paymeter.parking_calculator.application.helpers.CalculatorPriceHelper;
+import com.paymeter.parking_calculator.application.helpers.TimeHelper;
 import com.paymeter.parking_calculator.domain.model.Parking;
 import org.springframework.stereotype.Component;
 
-@Component
+// Bean name is mandatory
+@Component("newDiscountTypeStrategy")
 public class NewDiscountTypeStrategy implements DiscountStrategy {
 
     // Add varaibles and constants
@@ -65,11 +74,6 @@ public class NewDiscountTypeStrategy implements DiscountStrategy {
         // Add the strategy to calculate the tinal price
         
         return Final Price;
-    }
-
-    @Override
-    public boolean supports(String discountType) {
-        return DiscountType.NEW_DISCOUNT_TYPE_STRATEGY.name().equalsIgnoreCase(discountType);
     }
 }
 ```
@@ -105,7 +109,6 @@ CREATE TABLE parkings (
 
 1. **Unit Tests**: Create tests for your new strategy
 2. **Integration Test**: Verify the full flow
-3. **Database Test**: Ensure SQL commands work correctly
 
 ## Best Practices
 
