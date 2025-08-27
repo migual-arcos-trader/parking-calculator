@@ -7,9 +7,9 @@ public final class TestConstants {
     }
 
     // Parking IDs
+    public static final String PARKING_ID_0 = "P000000";
     public static final String PARKING_ID_1 = "P000123";
     public static final String PARKING_ID_2 = "P000456";
-    public static final String PARKING_ID_3 = "P000789";
     public static final String NON_EXISTENT_PARKING_ID = "NON_EXISTENT";
 
     // Hourly Rates

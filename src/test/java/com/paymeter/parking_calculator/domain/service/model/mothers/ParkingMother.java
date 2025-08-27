@@ -11,7 +11,7 @@ public final class ParkingMother {
 
     public static Parking createClient0Parking() {
         return Parking.builder()
-                .id(TestConstants.PARKING_ID_3)
+                .id(TestConstants.PARKING_ID_0)
                 .hourlyRate(TestConstants.HOURLY_RATE_5_EURO)
                 .discountName(TestConstants.DISCOUNT_NONE)
                 .build();
