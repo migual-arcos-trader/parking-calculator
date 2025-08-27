@@ -36,4 +36,5 @@ public final class TestConstants {
     public static final int HOUR_10 = 10;
     public static final int MINUTE_0 = 0;
     public static final int MINUTE_59 = 59;
+
 }
