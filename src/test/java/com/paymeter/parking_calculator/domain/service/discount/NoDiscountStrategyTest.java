@@ -12,12 +12,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class NoDiscountStrategyTest {
 
     private NoDiscountStrategy strategy;
-    private Parking client3Parking;
+    private Parking client0Parking;
 
     @BeforeEach
     void setUp() {
         strategy = new NoDiscountStrategy();
-        client3Parking = ParkingMother.createClient0Parking();
+        client0Parking = ParkingMother.createClient0Parking();
     }
 
     @Test
@@ -26,7 +26,7 @@ class NoDiscountStrategyTest {
         // Arrange
 
         // Act
-        double result = strategy.calculateFinalPrice(client3Parking, TestConstants.THIRTY_MINUTES);
+        double result = strategy.calculateFinalPrice(client0Parking, TestConstants.THIRTY_MINUTES);
 
         // Assert
         assertEquals(TestConstants.PRICE_5_EUR_RESULT, result);
@@ -38,7 +38,7 @@ class NoDiscountStrategyTest {
         // Arrange
 
         // Act
-        double result = strategy.calculateFinalPrice(client3Parking, TestConstants.TWO_HOURS_MINUTES);
+        double result = strategy.calculateFinalPrice(client0Parking, TestConstants.TWO_HOURS_MINUTES);
 
         // Assert
         assertEquals(TestConstants.PRICE_10_EUR_RESULT, result);
@@ -50,7 +50,7 @@ class NoDiscountStrategyTest {
         // Arrange
 
         // Act
-        double result = strategy.calculateFinalPrice(client3Parking, TestConstants.SIXTY_ONE_MINUTES);
+        double result = strategy.calculateFinalPrice(client0Parking, TestConstants.SIXTY_ONE_MINUTES);
 
         // Assert
         assertEquals(TestConstants.PRICE_10_EUR_RESULT, result);
@@ -62,7 +62,7 @@ class NoDiscountStrategyTest {
         // Arrange
 
         // Act
-        double result = strategy.calculateFinalPrice(client3Parking, TestConstants.TEN_HOURS_MINUTES);
+        double result = strategy.calculateFinalPrice(client0Parking, TestConstants.TEN_HOURS_MINUTES);
 
         // Assert
         assertEquals(TestConstants.PRICE_50_EUR_RESULT, result);
@@ -74,7 +74,7 @@ class NoDiscountStrategyTest {
         // Arrange
 
         // Act
-        double result = strategy.calculateFinalPrice(client3Parking, TestConstants.FIFTY_NINE_MINUTES);
+        double result = strategy.calculateFinalPrice(client0Parking, TestConstants.FIFTY_NINE_MINUTES);
 
         // Assert
         assertEquals(TestConstants.PRICE_5_EUR_RESULT, result);
@@ -86,7 +86,7 @@ class NoDiscountStrategyTest {
         // Arrange
 
         // Act
-        double result = strategy.calculateFinalPrice(client3Parking, TestConstants.FREE_MINUTES_THRESHOLD);
+        double result = strategy.calculateFinalPrice(client0Parking, TestConstants.FREE_MINUTES_THRESHOLD);
 
         // Assert
         assertEquals(TestConstants.PRICE_5_EUR_RESULT, result);
