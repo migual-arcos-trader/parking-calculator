@@ -111,4 +111,3 @@ src/main/java/com/paymeter/parking_calculator/
 ### Add New Discount Type
 
 [📄 ADD_NEW_DISCOUNT.md](./docs/ADD_NEW_DISCOUNT.md)
-

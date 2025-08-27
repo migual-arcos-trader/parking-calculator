@@ -107,8 +107,17 @@ CREATE TABLE parkings (
 
 ## Testing the New Discount
 
-1. **Unit Tests**: Create tests for your new strategy
-2. **Integration Test**: Verify the full flow
+1. **Unit Tests**: Create tests for your new strategy, for example:
+
+[👁‍ Max12HHoursFreeStrategyTest.java](../src/test/java/com/paymeter/parking_calculator/domain/service/discount/Max12HHoursFreeStrategyTest.java)
+
+Applying
+- Object mothers
+    - [👩‍🍼 DateTimeMother.java](../src/test/java/com/paymeter/parking_calculator/domain/service/model/mothers/DateTimeMother.java)
+    - [👩‍🍼 ParkingMother.java](../src/test/java/com/paymeter/parking_calculator/domain/service/model/mothers/ParkingMother.java)
+- Constants 
+  - [👩‍🍼 TestConstants.java](../src/test/java/com/paymeter/parking_calculator/domain/service/model/constants/TestConstants.java)
+- Border cases
 
 ## Best Practices
 
