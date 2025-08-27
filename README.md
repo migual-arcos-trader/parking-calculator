@@ -61,7 +61,7 @@ curl --location 'http://localhost:8080/tickets/calculate' \
 }'
 ```
 
-Or if you prefer from swagger-ui
+Or swagger-ui but the project should be built because it is a local url
 
 [Parking Calculator Service Swagger UI](http://localhost:8080/swagger-ui/index.html)
 
@@ -91,9 +91,9 @@ src/main/java/com/paymeter/parking_calculator/
 │   └── service/
 └── infrastructure/
     ├── adapter/
-    ├── config/
     ├── controller/
     ├── entity/
+    ├── interceptor/
     ├── repository/
     └── adapter/
 ```
@@ -105,3 +105,10 @@ src/main/java/com/paymeter/parking_calculator/
 - Lombok
 - Testcontainers
 - Gradle
+
+## Documentation
+
+### Add New Discount Type
+
+[📄 ADD_NEW_DISCOUNT.md](./docs/ADD_NEW_DISCOUNT.md)
+

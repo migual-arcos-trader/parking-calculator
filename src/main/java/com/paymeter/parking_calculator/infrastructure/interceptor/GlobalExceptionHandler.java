@@ -1,4 +1,4 @@
-package com.paymeter.parking_calculator.infrastructure.config;
+package com.paymeter.parking_calculator.infrastructure.interceptor;
 
 import com.paymeter.parking_calculator.domain.exception.ParkingNotFoundException;
 import org.springframework.http.HttpStatus;
