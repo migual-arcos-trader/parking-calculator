@@ -1,5 +1,6 @@
 # Adding New Discount Types
 
+
 ## Overview
 This document explains how to add new discount strategies to the Parking Calculator system. The architecture follows the Strategy Pattern for easy extensibility.
 
