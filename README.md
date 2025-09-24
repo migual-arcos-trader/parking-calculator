@@ -20,9 +20,14 @@ A Spring Boot microservice for calculating parking prices with different discoun
 ### Using Docker Compose (Recommended)
 
 Build, Test & Run the project
+
 ```bash
 # Build, Test & Run the project
 ./gradlew clean build
+```
+
+```bash
+# Build docker-compose
 docker-compose up --build
 ```
 

@@ -80,4 +80,5 @@ public class ParkingCalculatorController {
         log.info("Calculation successful: {}", response);
         return response;
     }
+
 }

@@ -26,4 +26,5 @@ public enum DiscountType {
         }
         throw new UnsupportedDiscountException("Unknown discount type: " + value);
     }
+
 }

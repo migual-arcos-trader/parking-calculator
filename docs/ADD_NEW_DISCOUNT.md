@@ -1,7 +1,9 @@
 # Adding New Discount Types
 
 ## Overview
-This document explains how to add new discount strategies to the Parking Calculator system. The architecture follows the Strategy Pattern for easy extensibility.
+
+This document explains how to add new discount strategies to the Parking Calculator system. The architecture follows the
+Strategy Pattern for easy extensibility.
 
 ## Step-by-Step Process
 
@@ -81,6 +83,7 @@ public class NewDiscountTypeStrategy implements DiscountStrategy {
 ### 3. Update Database with New Parking Configuration
 
 #### For new parking lots at [📊 data.sql](../src/main/resources/data.sql) file:
+
 ```
 INSERT INTO parkings (id, hourly_rate, discount_name) 
 VALUES ('P999999', 5.00, 'NEW_DISCOUNT_TYPE_STRATEGY')
@@ -88,6 +91,7 @@ ON CONFLICT (id) DO NOTHING;
 ```
 
 #### To update existing parking lots at [📊 data.sql](../src/main/resources/data.sql) file:
+
 ```
 UPDATE parkings 
 SET discount_name = 'NEW_DISCOUNT_TYPE_STRATEGY', 
@@ -112,11 +116,12 @@ CREATE TABLE parkings (
 [👁‍ Max12HHoursFreeStrategyTest.java](../src/test/java/com/paymeter/parking_calculator/domain/service/discount/Max12HHoursFreeStrategyTest.java)
 
 Applying
+
 - Object mothers
     - [👩‍🍼 DateTimeMother.java](../src/test/java/com/paymeter/parking_calculator/domain/service/model/mothers/DateTimeMother.java)
     - [👩‍🍼 ParkingMother.java](../src/test/java/com/paymeter/parking_calculator/domain/service/model/mothers/ParkingMother.java)
-- Constants 
-  - [👩‍🍼 TestConstants.java](../src/test/java/com/paymeter/parking_calculator/domain/service/model/constants/TestConstants.java)
+- Constants
+    - [👩‍🍼 TestConstants.java](../src/test/java/com/paymeter/parking_calculator/domain/service/model/constants/TestConstants.java)
 - Border cases
 
 ## Best Practices
